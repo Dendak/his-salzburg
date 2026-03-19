@@ -21,7 +21,6 @@ import {
   School,
   Shield,
   User,
-  Wallet,
   Mail,
   Phone,
   MapPin,
@@ -55,7 +54,6 @@ const facts = [
   { icon: School, label: "Schultyp", value: "Privatschule mit Öffentlichkeitsrecht" },
   { icon: Shield, label: "Schulerhalter", value: "Herz-Jesu-Missionare Salzburg" },
   { icon: User, label: "Direktor", value: "Prof. Mag. Franz Feichtl" },
-  { icon: Wallet, label: "Kosten", value: "Kostenlos für alle" },
 ];
 
 /* ── Page ── */
@@ -320,8 +318,8 @@ export default function HomePage() {
             <div className="bg-primary rounded-3xl p-8 sm:p-12 lg:p-16 text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,215,0,0.15),_transparent_50%)]" />
               <div className="relative">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Kostenloser Unterricht für alle</h2>
-                <p className="mt-4 text-white/80 text-lg max-w-2xl mx-auto">Der Unterricht ist für alle Schülerinnen und Schüler kostenlos. Nehmen Sie Kontakt mit uns auf — wir helfen gerne weiter.</p>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">Kontakt aufnehmen</h2>
+                <p className="mt-4 text-white/80 text-lg max-w-2xl mx-auto">Nehmen Sie Kontakt mit uns auf — wir helfen gerne weiter.</p>
                 <button onClick={() => scrollTo("kontakt")} className="inline-flex items-center gap-2 mt-8 px-8 py-3.5 bg-accent text-primary-dark font-semibold rounded-xl hover:bg-accent/90 transition-all hover:shadow-lg hover:shadow-accent/25">
                   Jetzt Kontakt aufnehmen <ArrowRight size={18} />
                 </button>
