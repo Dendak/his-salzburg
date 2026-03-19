@@ -11,6 +11,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
+import heroImg from "../../public/hero.webp";
 
 const features = [
   {
@@ -42,7 +43,7 @@ export default function Home() {
       <section className="relative min-h-[85vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/hero.webp"
+            src={heroImg}
             alt="Lehrerin unterrichtet Schülerin am Krankenbett"
             fill
             className="object-cover"

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Mail, Phone, MapPin, Send, Building } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import FadeIn from "@/components/FadeIn";
+import direktorImg from "../../../public/direktor.jpg";
 
 export default function Kontakt() {
   const [submitted, setSubmitted] = useState(false);
@@ -34,11 +35,12 @@ export default function Kontakt() {
                 <div className="mb-6">
                   <div className="w-32 h-44 rounded-2xl overflow-hidden mb-3 border-2 border-primary/10">
                     <Image
-                      src="/direktor.jpg"
+                      src={direktorImg}
                       alt="Prof. Mag. Franz Feichtl"
                       width={214}
                       height={300}
                       className="w-full h-full object-cover"
+                      placeholder="blur"
                     />
                   </div>
                   <p className="text-xs text-slate-500 uppercase tracking-wider font-medium">
