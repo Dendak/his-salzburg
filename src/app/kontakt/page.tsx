@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Mail, Phone, MapPin, Send, User, Building } from "lucide-react";
+import Image from "next/image";
+import { Mail, Phone, MapPin, Send, Building } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import FadeIn from "@/components/FadeIn";
 
@@ -30,20 +31,25 @@ export default function Kontakt() {
                   Kontaktdaten
                 </h2>
 
-                <div className="space-y-5">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                      <User size={18} className="text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-500 uppercase tracking-wider font-medium">
-                        Direktor
-                      </p>
-                      <p className="font-semibold text-slate-900">
-                        Prof. Mag. Franz Feichtl
-                      </p>
-                    </div>
+                <div className="mb-6">
+                  <div className="w-32 h-44 rounded-2xl overflow-hidden mb-3 border-2 border-primary/10">
+                    <Image
+                      src="/direktor.jpg"
+                      alt="Prof. Mag. Franz Feichtl"
+                      width={214}
+                      height={300}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-medium">
+                    Direktor
+                  </p>
+                  <p className="font-semibold text-slate-900">
+                    Prof. Mag. Franz Feichtl
+                  </p>
+                </div>
+
+                <div className="space-y-5">
 
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
