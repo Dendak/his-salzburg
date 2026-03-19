@@ -61,7 +61,23 @@ const facts = [
 /* ── Page ── */
 export default function HomePage() {
   const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = (e: FormEvent) => { e.preventDefault(); setSubmitted(true); };
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  const validateEmail = (value: string) => {
+    setEmail(value);
+    if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setEmailError("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (emailError || !email) return;
+    setSubmitted(true);
+  };
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -273,7 +289,8 @@ export default function HomePage() {
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-slate-700 mb-1.5">E-Mail *</label>
-                          <input type="email" required className="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm" placeholder="ihre@email.at" />
+                          <input type="email" required value={email} onChange={(e) => validateEmail(e.target.value)} onBlur={(e) => validateEmail(e.target.value)} className={`w-full px-4 py-2.5 rounded-xl border bg-white focus:ring-2 outline-none transition-all text-sm ${emailError ? "border-red-400 focus:border-red-400 focus:ring-red-100" : "border-slate-200 focus:border-primary focus:ring-primary/20"}`} placeholder="ihre@email.at" />
+                          {emailError && <p className="mt-1 text-xs text-red-500">{emailError}</p>}
                         </div>
                       </div>
                       <div>
