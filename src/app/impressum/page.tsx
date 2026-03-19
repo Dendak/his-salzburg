@@ -16,7 +16,7 @@ export default function Impressum() {
               <p>
                 <strong>Höhere Schule im Spital Salzburg (HIS)</strong>
                 <br />
-                Schönleitenstr. 1<br />
+                Schönleitenstraße 1<br />
                 5020 Salzburg, Österreich
               </p>
               <p>

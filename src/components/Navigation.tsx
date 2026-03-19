@@ -1,35 +1,50 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 
 const links = [
-  { href: "/", label: "Startseite" },
-  { href: "/angebote", label: "Angebote" },
-  { href: "/ueber-uns", label: "Über uns" },
-  { href: "/kontakt", label: "Kontakt" },
+  { href: "#startseite", label: "Startseite" },
+  { href: "#angebote", label: "Angebote" },
+  { href: "#ueber-uns", label: "Über uns" },
+  { href: "#kontakt", label: "Kontakt" },
 ];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
+  const [active, setActive] = useState("#startseite");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+
+      const sections = links.map((l) => l.href.slice(1));
+      let current = sections[0];
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 120) {
+          current = id;
+        }
+      }
+      setActive("#" + current);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
+  const scrollTo = useCallback((href: string) => {
+    const el = document.getElementById(href.slice(1));
+    if (el) {
+      const offset = 80;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
     setIsOpen(false);
-  }, [pathname]);
-
-  const basePath = process.env.NODE_ENV === "production" ? "/his-salzburg" : "";
+  }, []);
 
   return (
     <nav
@@ -41,38 +56,32 @@ export default function Navigation() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16 sm:h-20">
-          <Link href="/" className="shrink-0">
+          <button onClick={() => scrollTo("#startseite")} className="shrink-0">
             <Logo className="h-10 sm:h-12 w-auto" />
-          </Link>
+          </button>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
-            {links.map((link) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/" || pathname === basePath || pathname === basePath + "/"
-                  : pathname.startsWith(basePath + link.href);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                    isActive
-                      ? "text-accent"
-                      : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  {link.label}
-                  {isActive && (
-                    <motion.div
-                      layoutId="nav-indicator"
-                      className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent rounded-full"
-                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    />
-                  )}
-                </Link>
-              );
-            })}
+            {links.map((link) => (
+              <button
+                key={link.href}
+                onClick={() => scrollTo(link.href)}
+                className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                  active === link.href
+                    ? "text-accent"
+                    : "text-white/90 hover:text-white hover:bg-white/10"
+                }`}
+              >
+                {link.label}
+                {active === link.href && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent rounded-full"
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  />
+                )}
+              </button>
+            ))}
           </div>
 
           {/* Mobile toggle */}
@@ -97,25 +106,19 @@ export default function Navigation() {
             className="md:hidden bg-primary-dark/95 backdrop-blur-md border-t border-white/10 overflow-hidden"
           >
             <div className="px-4 py-3 space-y-1">
-              {links.map((link) => {
-                const isActive =
-                  link.href === "/"
-                    ? pathname === "/" || pathname === basePath || pathname === basePath + "/"
-                    : pathname.startsWith(basePath + link.href);
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                      isActive
-                        ? "bg-white/10 text-accent"
-                        : "text-white/80 hover:bg-white/5 hover:text-white"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+              {links.map((link) => (
+                <button
+                  key={link.href}
+                  onClick={() => scrollTo(link.href)}
+                  className={`block w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    active === link.href
+                      ? "bg-white/10 text-accent"
+                      : "text-white/80 hover:bg-white/5 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </button>
+              ))}
             </div>
           </motion.div>
         )}

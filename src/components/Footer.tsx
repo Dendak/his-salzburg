@@ -4,7 +4,23 @@ import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
 import Logo from "./Logo";
 
+const navLinks = [
+  { href: "#startseite", label: "Startseite" },
+  { href: "#angebote", label: "Angebote" },
+  { href: "#ueber-uns", label: "Über uns" },
+  { href: "#kontakt", label: "Kontakt" },
+  { href: "/impressum", label: "Impressum", isPage: true },
+];
+
 export default function Footer() {
+  const scrollTo = (id: string) => {
+    const el = document.getElementById(id.slice(1));
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: "smooth" });
+    }
+  };
+
   return (
     <footer className="bg-primary text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
@@ -22,20 +38,23 @@ export default function Footer() {
               Navigation
             </h3>
             <ul className="space-y-2">
-              {[
-                { href: "/", label: "Startseite" },
-                { href: "/angebote", label: "Angebote" },
-                { href: "/ueber-uns", label: "Über uns" },
-                { href: "/kontakt", label: "Kontakt" },
-                { href: "/impressum", label: "Impressum" },
-              ].map((link) => (
+              {navLinks.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-white/70 hover:text-white text-sm transition-colors"
-                  >
-                    {link.label}
-                  </Link>
+                  {"isPage" in link ? (
+                    <Link
+                      href={link.href}
+                      className="text-white/70 hover:text-white text-sm transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => scrollTo(link.href)}
+                      className="text-white/70 hover:text-white text-sm transition-colors"
+                    >
+                      {link.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -48,7 +67,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-white/70">
                 <MapPin size={16} className="mt-0.5 shrink-0 text-accent" />
-                <span>Schönleitenstr. 1, 5020 Salzburg</span>
+                <span>Schönleitenstraße 1, 5020 Salzburg</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-white/70">
                 <Phone size={16} className="shrink-0 text-accent" />
@@ -58,10 +77,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-white/70">
                 <Mail size={16} className="shrink-0 text-accent" />
-                <a
-                  href="mailto:direktion@his-salzburg.at"
-                  className="hover:text-white transition-colors"
-                >
+                <a href="mailto:direktion@his-salzburg.at" className="hover:text-white transition-colors">
                   direktion@his-salzburg.at
                 </a>
               </li>
