@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
@@ -16,10 +17,14 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState("#startseite");
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHome = pathname === "/" || pathname === "/his-salzburg" || pathname === "/his-salzburg/";
 
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
+      if (!isHome) return;
 
       const sections = links.map((l) => l.href.slice(1));
       let current = sections[0];
@@ -34,9 +39,14 @@ export default function Navigation() {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   const scrollTo = useCallback((href: string) => {
+    if (!isHome) {
+      router.push("/" + href);
+      setIsOpen(false);
+      return;
+    }
     const el = document.getElementById(href.slice(1));
     if (el) {
       const offset = 80;
@@ -44,7 +54,7 @@ export default function Navigation() {
       window.scrollTo({ top, behavior: "smooth" });
     }
     setIsOpen(false);
-  }, []);
+  }, [isHome, router]);
 
   return (
     <nav
@@ -67,13 +77,13 @@ export default function Navigation() {
                 key={link.href}
                 onClick={() => scrollTo(link.href)}
                 className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                  active === link.href
+                  isHome && active === link.href
                     ? "text-accent"
                     : "text-white/90 hover:text-white hover:bg-white/10"
                 }`}
               >
                 {link.label}
-                {active === link.href && (
+                {isHome && active === link.href && (
                   <motion.div
                     layoutId="nav-indicator"
                     className="absolute bottom-0 left-2 right-2 h-0.5 bg-accent rounded-full"
@@ -111,7 +121,7 @@ export default function Navigation() {
                   key={link.href}
                   onClick={() => scrollTo(link.href)}
                   className={`block w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    active === link.href
+                    isHome && active === link.href
                       ? "bg-white/10 text-accent"
                       : "text-white/80 hover:bg-white/5 hover:text-white"
                   }`}
